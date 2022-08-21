@@ -25,12 +25,14 @@ make copy
 ```
 # Host 模式运行, 所有监听端口映射到母机, 并挂载外部的 www 目录
 docker run -d --restart unless-stopped \
+    --name btpanel \
     --net host \
     -v /docker/btpanel/data:/www \
     local/btpanel
 
 ### 正常的端口映射模式运行, 并挂载外部的 www 目录
 docker run -d --restart unless-stopped \
+    --name btpanel \
     -p 80:80 \
     -p 443:443 \
     -p 8888:8888 \
