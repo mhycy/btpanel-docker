@@ -38,34 +38,31 @@ RUN curl -sSO http://download.bt.cn/install/install_panel.sh \
 RUN mkdir -p /www/server/panel/install/nginx/custom \
     && echo "custom" > /www/server/panel/install/nginx/config.pl \
     && echo "--with-stream" > /www/server/panel/install/nginx/custom/args.pl \
-    && cat>/www/server/panel/install/nginx/custom/init.sh<<EOF
-CCFLAGS="-I/usr/include -static -static-libgcc"
-LDFLAGS="-L/usr/lib64 -static"
-EOF \
+    && echo 'CCFLAGS="-I/usr/include -static -static-libgcc"' > /www/server/panel/install/nginx/custom/init.sh \
+    && echo 'LDFLAGS="-L/usr/lib64 -static"' >> /www/server/panel/install/nginx/custom/init.sh \
     && curl -sSO http://download.bt.cn/install/0/nginx.sh \
-    && sh nginx.sh install 1.22
+    && sh nginx.sh install 1.22 \
+    && rm nginx.sh
 
 # 安装 mysql 
 RUN mkdir -p /www/server/panel/install/mysql/custom \
     && echo "custom" > /www/server/panel/install/mysql/config.pl \
     && echo "-DBUILD_SHARED_LIBRARIES=OFF" > /www/server/panel/install/mysql/custom/args.pl \
-    && cat>/www/server/panel/install/mysql/custom/init.sh<<EOF
-CCFLAGS="-I/usr/include -static -static-libgcc"
-LDFLAGS="-L/usr/lib64 -static"
-EOF \
+    && echo 'CCFLAGS="-I/usr/include -static -static-libgcc"' > /www/server/panel/install/mysql/custom/init.sh \
+    && echo 'LDFLAGS="-L/usr/lib64 -static"' >> /www/server/panel/install/mysql/custom/init.sh \
     && curl -sSO http://download.bt.cn/install/0/mysql.sh \
-    && sh mysql.sh install mariadb_10.8
+    && sh mysql.sh install mariadb_10.8 \
+    && rm mysql.sh
 
 # 安装 php 
 RUN mkdir -p /www/server/panel/install/php/custom \
     && echo "custom" > /www/server/panel/install/php/config.pl \
     && echo "--enable-static" > /www/server/panel/install/php/custom/args.pl \
-    && cat>/www/server/panel/install/php/custom/init.sh<<EOF
-CCFLAGS="-I/usr/include -static -static-libgcc"
-LDFLAGS="-L/usr/lib64 -static"
-EOF \
+    && echo 'CCFLAGS="-I/usr/include -static -static-libgcc"' > /www/server/panel/install/php/custom/init.sh \
+    && echo 'LDFLAGS="-L/usr/lib64 -static"' >> /www/server/panel/install/php/custom/init.sh \
     && curl -sSO http://download.bt.cn/install/0/php.sh \
-    && sh php.sh install 74
+    && sh php.sh install 74 \
+    && rm php.sh
 
 # 最终配置
 RUN sed -i "s/password    requisite/#password    requisite/g" /etc/pam.d/system-auth \
