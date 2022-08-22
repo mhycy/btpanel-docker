@@ -12,7 +12,7 @@ COPY entrypoint.sh /entrypoint.sh
 
 # /etc/init.d 映射到 www 文件夹下
 RUN rm -rf /etc/init.d \
-    && mkdir /www/init.d \
+    && mkdir -p /www/init.d \
     && ln -s /www/init.d /etc/init.d \
     && chmod +x /entrypoint.sh
 
