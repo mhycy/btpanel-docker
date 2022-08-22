@@ -29,7 +29,8 @@ RUN yum -y update && yum -y upgrade \
 RUN curl -sSO http://download.bt.cn/install/install_panel.sh \
     && echo y | bash install_panel.sh \
     && rm install_panel.sh \
-    && curl -o /www/server/panel/install/lib.sh http://download.bt.cn/install/0/lib.sh && sh /www/server/panel/install/lib.sh \
+    && curl -o /www/server/panel/install/lib.sh http://download.bt.cn/install/0/lib.sh \
+    && sh /www/server/panel/install/lib.sh
 
 # 安装 nginx 
 RUN mkdir -p /www/server/panel/install/nginx/custom \
