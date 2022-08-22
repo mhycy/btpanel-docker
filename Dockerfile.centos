@@ -26,14 +26,49 @@ RUN yum -y update && yum -y upgrade \
     && ssh-keygen -q -t dsa -f /etc/ssh/ssh_host_dsa_key -N "" -C "" \
     && ssh-keygen -q -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N "" -C "" \
     && ssh-keygen -q -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N "" -C "" \
-    && echo "\nPort ${SSH_PORT}}" >> /etc/ssh/sshd_config
+    && echo "Port ${SSH_PORT}" >> /etc/ssh/sshd_config
 
 # 安装宝塔面板
 RUN curl -sSO http://download.bt.cn/install/install_panel.sh \
     && echo y | bash install_panel.sh \
     && rm install_panel.sh \
     && curl -o /www/server/panel/install/lib.sh http://download.bt.cn/install/0/lib.sh && sh /www/server/panel/install/lib.sh \
-    && sed -i "s/password    requisite/#password    requisite/g" /etc/pam.d/system-auth \
+
+# 安装 nginx 
+RUN mkdir -p /www/server/panel/install/nginx/custom \
+    && echo "custom" > /www/server/panel/install/nginx/config.pl \
+    && echo "--with-stream" > /www/server/panel/install/nginx/custom/args.pl \
+    && cat>/www/server/panel/install/nginx/custom/init.sh<<EOF
+CCFLAGS="-I/usr/include -static -static-libgcc"
+LDFLAGS="-L/usr/lib64 -static"
+EOF \
+    && curl -sSO http://download.bt.cn/install/0/nginx.sh \
+    && sh nginx.sh install 1.22
+
+# 安装 mysql 
+RUN mkdir -p /www/server/panel/install/mysql/custom \
+    && echo "custom" > /www/server/panel/install/mysql/config.pl \
+    && echo "-DBUILD_SHARED_LIBRARIES=OFF" > /www/server/panel/install/mysql/custom/args.pl \
+    && cat>/www/server/panel/install/mysql/custom/init.sh<<EOF
+CCFLAGS="-I/usr/include -static -static-libgcc"
+LDFLAGS="-L/usr/lib64 -static"
+EOF \
+    && curl -sSO http://download.bt.cn/install/0/mysql.sh \
+    && sh mysql.sh install mariadb_10.8
+
+# 安装 php 
+RUN mkdir -p /www/server/panel/install/php/custom \
+    && echo "custom" > /www/server/panel/install/php/config.pl \
+    && echo "--enable-static" > /www/server/panel/install/php/custom/args.pl \
+    && cat>/www/server/panel/install/php/custom/init.sh<<EOF
+CCFLAGS="-I/usr/include -static -static-libgcc"
+LDFLAGS="-L/usr/lib64 -static"
+EOF \
+    && curl -sSO http://download.bt.cn/install/0/php.sh \
+    && sh php.sh install 74
+
+# 最终配置
+RUN sed -i "s/password    requisite/#password    requisite/g" /etc/pam.d/system-auth \
     && sed -i "s/use_authtok//g" /etc/pam.d/system-auth \
     && echo "${PANEL_USER}" | bt 6 \
     && echo "${PANEL_PASSWORD}" | bt 5 \
@@ -43,7 +78,6 @@ RUN curl -sSO http://download.bt.cn/install/install_panel.sh \
     && yum clean all \
     && chmod +x /entrypoint.sh
     
-
 CMD /entrypoint.sh
 
 EXPOSE 80 443 3306 8888

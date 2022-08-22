@@ -35,6 +35,7 @@ docker run -d --restart unless-stopped \
     --name btpanel \
     -p 80:80 \
     -p 443:443 \
+    -p 3306:3306 \
     -p 8888:8888 \
     -v /docker/btpanel/data:/www \
     local/btpanel
@@ -61,6 +62,6 @@ docker exec btpanel bash -c "echo ${PANEL_PORT} > /www/server/panel/data/port.pl
 ```markdown
 ARG: --with-stream 
 SCRIPT: 
-    CCFLAGS="-I/usr/include"
-    LDFLAGS="-L/usr/lib64"
+    CCFLAGS="-I/usr/include -static -static-libgcc"
+    LDFLAGS="-L/usr/lib64 -static"
 ```
