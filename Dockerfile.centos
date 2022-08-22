@@ -11,13 +11,10 @@ ENV PANEL_PORT=8888
 COPY entrypoint.sh /entrypoint.sh
 
 # /etc/letsencrypt, /etc/init.d 映射到 www 文件夹下持久化
-RUN mkdir -p /www/letsencrypt \
-    && ln -s /www/letsencrypt /etc/letsencrypt \
-    && rm -rf /etc/init.d \
+RUN rm -rf /etc/init.d \
     && mkdir /www/init.d \
     && ln -s /www/init.d /etc/init.d \
-    && chmod +x /entrypoint.sh \
-    && mkdir /www/wwwroot
+    && chmod +x /entrypoint.sh
 
 # 安装依赖, 安装 ssh server
 RUN yum -y update && yum -y upgrade \
