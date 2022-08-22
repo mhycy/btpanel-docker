@@ -11,9 +11,7 @@ ENV PANEL_PORT=8888
 COPY entrypoint.sh /entrypoint.sh
 
 # /www/server/panel/vhost/letsencrypt, /etc/init.d 映射到 www 文件夹下
-RUN mkdir -p /www/server/panel/vhost/letsencrypt \
-    && ln -s /www/server/panel/vhost/letsencrypt /www/letsencrypt \
-    && rm -rf /etc/init.d \
+RUN rm -rf /etc/init.d \
     && mkdir /www/init.d \
     && ln -s /www/init.d /etc/init.d \
     && chmod +x /entrypoint.sh
