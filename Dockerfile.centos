@@ -80,6 +80,6 @@ RUN sed -i "s/password    requisite/#password    requisite/g" /etc/pam.d/system-
     
 CMD /entrypoint.sh
 
-EXPOSE 80 443 3306 8888
+EXPOSE 80 443 3306 8022 8888
 
 HEALTHCHECK --interval=5s --timeout=3s CMD curl -sf http://127.0.0.1:$(cat /www/server/panel/data/port.pl)$(cat /www/server/panel/data/admin_path.pl) || exit 1
