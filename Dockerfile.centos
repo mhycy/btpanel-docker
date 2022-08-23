@@ -10,8 +10,7 @@ ENV PANEL_PORT=8888
 # /etc/init.d 映射到 www 文件夹下
 RUN rm -rf /etc/init.d \
     && mkdir -p /www/init.d \
-    && ln -s /www/init.d /etc/init.d \
-    && chmod +x /entrypoint.sh
+    && ln -s /www/init.d /etc/init.d
 
 # 安装依赖, 安装 ssh server
 RUN yum -y update && yum -y upgrade \
