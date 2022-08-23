@@ -15,7 +15,7 @@ RUN rm -rf /etc/init.d \
 # 安装依赖, 安装 ssh server
 RUN echo "include_only=.cn" >> /etc/yum/pluginconf.d/fastestmirror.conf \
     && yum -y update && yum -y upgrade \
-    && yum -y install wget which iproute openssh-server glibc-static zlib-static libxslt-devel initscripts \
+    && yum -y install wget which iproute openssh-server glibc-static zlib-static libxslt-devel \
     && ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_rsa_key -N "" -C "" \
     && ssh-keygen -q -t dsa -f /etc/ssh/ssh_host_dsa_key -N "" -C "" \
     && ssh-keygen -q -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N "" -C "" \
@@ -73,7 +73,8 @@ RUN curl -sSO http://download.bt.cn/install/0/pm2.sh \
 COPY entrypoint.sh /entrypoint.sh
 
 # 最终配置
-RUN sed -i "s/^include_only=.cn//g" /etc/yum/pluginconf.d/fastestmirror.conf \
+RUN yum install -y initscripts \
+    && sed -i "s/^include_only=.cn//g" /etc/yum/pluginconf.d/fastestmirror.conf \
     && sed -i "s/password    requisite/#password    requisite/g" /etc/pam.d/system-auth \
     && sed -i "s/use_authtok//g" /etc/pam.d/system-auth \
     && echo "${PANEL_USER}" | bt 6 \
