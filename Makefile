@@ -1,8 +1,8 @@
 build:
-	docker build -f Dockerfile.centos -t local/btpanel .
+	docker build -f Dockerfile.centos -t mhycy/baota .
 
 copy:
-	mkdir $(shell pwd)/btpanel && docker run --rm -v $(shell pwd)/btpanel:/btpanel local/btpanel cp -R /www /btpanel
+	mkdir $(shell pwd)/baota && docker run --rm -v $(shell pwd)/baota:/baota mhycy/baota cp -R /www /baota
 
 rm-image:
-	docker image rm local/btpanel
+	docker image rm mhycy/baota
