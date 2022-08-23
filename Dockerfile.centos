@@ -73,7 +73,8 @@ RUN curl -o nodejs.sh http://download.bt.cn/install/plugin/nodejs/install.sh \
 COPY entrypoint.sh /entrypoint.sh
 
 # 最终配置
-RUN sed -i "s/password    requisite/#password    requisite/g" /etc/pam.d/system-auth \
+RUN sed -i "s/enabled=0/enabled=1/g" /etc/yum/pluginconf.d/fastestmirror.conf \
+    && sed -i "s/password    requisite/#password    requisite/g" /etc/pam.d/system-auth \
     && sed -i "s/use_authtok//g" /etc/pam.d/system-auth \
     && echo "${PANEL_USER}" | bt 6 \
     && echo "${PANEL_PASSWORD}" | bt 5 \
