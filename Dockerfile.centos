@@ -7,9 +7,6 @@ ENV CONTAINER_ROOT_PASSWORD=btpassword
 ENV SSH_PORT=8022
 ENV PANEL_PORT=8888
 
-# 设置 entrypoint
-COPY entrypoint.sh /entrypoint.sh
-
 # /etc/init.d 映射到 www 文件夹下
 RUN rm -rf /etc/init.d \
     && mkdir -p /www/init.d \
@@ -66,6 +63,9 @@ RUN mkdir -p /www/server/panel/install/php/custom \
 RUN curl -sSO http://download.bt.cn/install/0/pm2.sh \
     && sh pm2.sh install \
     && rm pm2.sh
+
+# 拷贝 entrypoint
+COPY entrypoint.sh /entrypoint.sh
 
 # 最终配置
 RUN sed -i "s/password    requisite/#password    requisite/g" /etc/pam.d/system-auth \
