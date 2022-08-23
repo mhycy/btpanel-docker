@@ -59,9 +59,14 @@ RUN mkdir -p /www/server/panel/install/php/custom \
     && rm php.sh
 
 # 安装 node 环境 
-RUN curl -sSO http://download.bt.cn/install/0/pm2.sh \
-    && sh pm2.sh install \
-    && rm pm2.sh
+# RUN curl -sSO http://download.bt.cn/install/0/pm2.sh \
+#     && sh pm2.sh install \
+#     && rm pm2.sh
+
+# 安装 node 环境
+RUN curl -o nodejs.sh http://download.bt.cn/install/plugin/nodejs/install.sh \
+    && sh nodejs.sh install \
+    && rm nodejs.sh
 
 # 拷贝 entrypoint
 COPY entrypoint.sh /entrypoint.sh
