@@ -7,6 +7,11 @@ ENV CONTAINER_ROOT_PASSWORD=btpassword
 ENV SSH_PORT=8022
 ENV PANEL_PORT=8888
 
+# /etc/init.d 映射到 www 文件夹下
+RUN rm -rf /etc/init.d \
+    && mkdir -p /www/init.d \
+    && ln -s /www/init.d /etc/init.d
+
 # 安装依赖, 安装 ssh server
 RUN echo "include_only=.cn" >> /etc/yum/pluginconf.d/fastestmirror.conf \
     && yum -y update && yum -y upgrade \
