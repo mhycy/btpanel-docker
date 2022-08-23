@@ -73,8 +73,7 @@ RUN curl -sSO http://download.bt.cn/install/0/pm2.sh \
 COPY entrypoint.sh /entrypoint.sh
 
 # 最终配置
-RUN yum install -y initscripts \
-    && sed -i "s/^include_only=.cn//g" /etc/yum/pluginconf.d/fastestmirror.conf \
+RUN sed -i "s/^include_only=.cn//g" /etc/yum/pluginconf.d/fastestmirror.conf \
     && sed -i "s/password    requisite/#password    requisite/g" /etc/pam.d/system-auth \
     && sed -i "s/use_authtok//g" /etc/pam.d/system-auth \
     && echo "${PANEL_USER}" | bt 6 \
@@ -83,6 +82,7 @@ RUN yum install -y initscripts \
     && echo "${PANEL_PORT}" > /www/server/panel/data/port.pl \
     && echo "${CONTAINER_ROOT_PASSWORD}" | passwd --stdin root \
     && yum clean all \
+    && rm /www/server/data/*.err \
     && chmod +x /entrypoint.sh
     
 CMD /entrypoint.sh
