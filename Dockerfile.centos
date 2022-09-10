@@ -71,6 +71,7 @@ RUN curl -sSO http://download.bt.cn/install/0/pm2.sh \
 
 # 安装 PhpMyAdmin
 RUN curl -sSO http://download.bt.cn/install/0/phpmyadmin.sh \
+    && /etc/init.d/nginx restart \
     && sh phpmyadmin.sh install 5.2 \
     && rm phpmyadmin.sh
 
