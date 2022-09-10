@@ -25,7 +25,7 @@ RUN echo "include_only=.cn" >> /etc/yum/pluginconf.d/fastestmirror.conf \
 # 安装宝塔面板
 RUN curl -sSO http://download.bt.cn/install/install_panel.sh \
     && echo y | bash install_panel.sh \
-    && rm install_panel.sh \
+    && rm -f install_panel.sh \
     && curl -o /www/server/panel/install/lib.sh http://download.bt.cn/install/0/lib.sh \
     && sh /www/server/panel/install/lib.sh
 
@@ -37,7 +37,7 @@ RUN mkdir -p /www/server/panel/install/nginx/custom \
     && echo 'LDFLAGS="-L/usr/lib64 -static"' >> /www/server/panel/install/nginx/custom/init.sh \
     && curl -sSO http://download.bt.cn/install/0/nginx.sh \
     && sh nginx.sh install 1.22 \
-    && rm nginx.sh
+    && rm -f nginx.sh
 
 # 安装 mysql 
 RUN mkdir -p /www/server/panel/install/mysql/custom \
@@ -47,7 +47,7 @@ RUN mkdir -p /www/server/panel/install/mysql/custom \
     && echo 'LDFLAGS="-L/usr/lib64 -static"' >> /www/server/panel/install/mysql/custom/init.sh \
     && curl -sSO http://download.bt.cn/install/0/mysql.sh \
     && sh mysql.sh install mariadb_10.8 \
-    && rm mysql.sh
+    && rm -f mysql.sh
 
 # 安装 php 
 RUN mkdir -p /www/server/panel/install/php/custom \
@@ -57,23 +57,23 @@ RUN mkdir -p /www/server/panel/install/php/custom \
     && echo 'LDFLAGS="-L/usr/lib64 -static"' >> /www/server/panel/install/php/custom/init.sh \
     && curl -sSO http://download.bt.cn/install/0/php.sh \
     && sh php.sh install 74 \
-    && rm php.sh
+    && rm -f php.sh
 
 # 安装 node 环境 
 RUN curl -sSO http://download.bt.cn/install/0/pm2.sh \
     && sh pm2.sh install \
-    && rm pm2.sh
+    && rm -f pm2.sh
 
 # # 安装 node 环境
 # RUN curl -o nodejs.sh http://download.bt.cn/install/plugin/nodejs/install.sh \
 #     && sh nodejs.sh install \
-#     && rm nodejs.sh
+#     && rm -f nodejs.sh
 
 # 安装 PhpMyAdmin
 RUN curl -sSO http://download.bt.cn/install/0/phpmyadmin.sh \
     && /etc/init.d/nginx restart \
-    && sh phpmyadmin.sh install 5.2 \
-    && rm phpmyadmin.sh
+    && sh phpmyadmin.sh install 5.2 2>&1\
+    && rm -f phpmyadmin.sh
 
 # 拷贝 entrypoint
 COPY entrypoint.sh /entrypoint.sh
