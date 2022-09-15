@@ -74,7 +74,7 @@ RUN curl -sSO http://download.bt.cn/install/0/pm2.sh \
 #     && sh nodejs.sh install \
 #     && rm -f nodejs.sh
 
-# 安装 PhpMyAdmin
+# 安装 phpmyadmin
 RUN curl -sSO http://download.bt.cn/install/0/phpmyadmin.sh \
     && sh phpmyadmin.sh install 5.2 || echo '' \
     && rm -f phpmyadmin.sh
@@ -92,6 +92,10 @@ RUN sed -i "s/^include_only=.cn//g" /etc/yum/pluginconf.d/fastestmirror.conf \
     && echo "${PANEL_PORT}" > /www/server/panel/data/port.pl \
     && echo "${CONTAINER_ROOT_PASSWORD}" | passwd --stdin root \
     && yum clean all \
+    && rm -rf /www/server/panel/logs/request/*.json \
+    && echo -n "" > /www/server/panel/logs/task.log \
+    && echo -n "" > /www/server/panel/logs/task.pid \
+    && echo -n "" > /www/server/panel/logs/panel.pid \
     && rm /www/server/data/*.err \
     && chmod +x /entrypoint.sh
     
